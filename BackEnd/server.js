@@ -54,6 +54,7 @@ app.get('/api/books', (req, res) => {
   })
 })
 
+//find a book item from the list
 app.get('/api/book/:id', (req, res)=>{
   console.log(req.params.id);
   bookModel.findById(req.params.id,(error,data)=>{
@@ -61,6 +62,25 @@ app.get('/api/book/:id', (req, res)=>{
   })
 })
 
+//updating a boo item from the list
+app.put('/api/book/:id',(req, res)=>{
+ 
+  console.log("Update: "+req.params.id);
+  console.log(req.body);
+  
+  bookModel.findByIdAndUpdate(req.params.id,req.body,{new:true},
+    (error,data)=>{
+      res.send(data);
+    })
+})
+  //deleting a book item from the list
+  app.delete('/api/book/:id', (req, res)=>{
+    console.log("Deleting: " +req.params.id);
+
+    bookModel.findByIdAndDelete({_id:req.params.id},(error,data)=>{
+      res.send(data);
+    })
+  })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

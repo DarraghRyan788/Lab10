@@ -1,7 +1,25 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
+import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import axios from "axios";
 
 export class BookItem extends React.Component {
+
+    constructor(){
+        super();
+        this.DeleteBook = this.DeleteBook.bind(this);
+    }
+    DeleteBook(e){
+        e.preventDefault();
+
+        axios.delete('http://localhost:4000/api/book/'+this.props.book._id)
+        .then((res)=>{
+            this.props.ReloadData();
+        })
+        .catch();
+
+    }
     render() {
         return (
             <div>
@@ -19,6 +37,8 @@ export class BookItem extends React.Component {
                     </footer>
                         </blockquote>
                     </Card.Body>
+                    <Link to={'/edit/'+this.props.book._id} className='btn btn-primary'>Edit</Link>
+                    <Button variant="danger" onClick={this.DeleteBook}>Delete</Button>
                 </Card>
             </div>
         );
