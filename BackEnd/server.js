@@ -19,6 +19,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../build')));
+app.use('/static', express.static(path.join(__dirname, 'build//static')));
+
 //mongodb+srv://admin:<password>@cluster0.8taek.mongodb.net/?retryWrites=true&w=majority
 // getting-started.js
 const mongoose = require('mongoose');
@@ -31,7 +35,8 @@ async function main() {
 const bookSchema = new mongoose.Schema({
   title: String,
   cover: String,
-  author: String
+  author: String,
+  image: String
 });
 
 const bookModel = mongoose.model('Bookssss', bookSchema);
@@ -42,7 +47,8 @@ app.post('/api/books',(req,res)=>{
   bookModel.create({
     title: req.body.title,
     cover:req.body.cover,
-    author:req.body.author
+    author:req.body.author,
+    image:req.body.image
   })
   
   res.send('Data Recieved');
@@ -81,6 +87,13 @@ app.put('/api/book/:id',(req, res)=>{
       res.send(data);
     })
   })
+
+  //add at the bottom just over app.listen
+// Handles any requests that don't match the ones above
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'/../build/index.html'));
+  });
+  
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
